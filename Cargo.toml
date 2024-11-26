@@ -3,6 +3,10 @@ name = "ical_property"
 version = "0.1.0"
 edition = "2021"
 
+description = "Get a struct with all properties from an ical calendar."
+
+license = "MIT"
+
 [dependencies]
 anyhow = "1.0.93"
 chrono = "0.4.38"
