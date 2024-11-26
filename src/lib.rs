@@ -1,3 +1,6 @@
+#![deny(missing_docs)]
+#![doc = include_str!("../README.md")]
+
 use anyhow::{anyhow, Error};
 use chrono::{DateTime, Duration, Local, NaiveDate, NaiveDateTime, Utc};
 use ical::parser::ical::component::IcalEvent;
@@ -19,9 +22,13 @@ impl<T> OptionVecPush<T> for Option<Vec<T>> {
     }
 }
 
+/// Events can either happen at a date
+/// or a date time.
 #[derive(Debug)]
 pub enum DateMaybeTime {
+    /// Event with a date and time
     DateTime(DateTime<Utc>),
+    /// Event without a time, just a date
     Date(NaiveDate), // without time zone
 }
 
@@ -37,10 +44,15 @@ impl From<DateTime<Utc>> for DateMaybeTime {
     }
 }
 
+/// When inviting others, an
+/// Event can be tentative, confirmed or cancelled.
 #[derive(Debug)]
 pub enum EventStatus {
+    /// Invite was not confirmed.
     Tentative,
+    /// Invite was confirmed.
     Confirmed,
+    /// Invite was cancelled.
     Cancelled,
 }
 
@@ -57,9 +69,13 @@ impl FromStr for EventStatus {
     }
 }
 
+/// Whether an event is blocking a time interval
+/// in the calender.
 #[derive(Debug)]
 pub enum EventTransparency {
+    /// Event block interval.
     Opaque,
+    /// Event does not block interval.
     Transparent,
 }
 
@@ -126,29 +142,54 @@ fn parse_datetime(s: &str) -> Result<DateMaybeTime, Error> {
     dateparser::parse(s).map(Into::into)
 }
 
+/// Heart of this crate. It is supposed to
+/// define an event as described in RFC 5545,
+/// but with fitting datatypes.
 #[derive(Debug, Default)]
 pub struct Event {
+    /// Matches UID.
     pub uid: Option<String>,
+    /// Matches CREATED.
     pub created: Option<DateMaybeTime>,
+    /// Matches SUMMARY.
     pub summary: Option<String>,
+    /// Matches START.
     pub start: Option<DateMaybeTime>,
+    /// Matches END.
     pub end: Option<DateMaybeTime>,
+    /// Matches DURATION.
     pub duration: Option<Duration>,
+    /// Matches LOCATION.
     pub location: Option<String>,
+    /// Matches DESCRIPTION.
     pub description: Option<String>,
+    /// Matches STATUS.
     pub status: Option<EventStatus>,
+    /// Matches TRANSPARENCY.
     pub transparency: Option<EventTransparency>,
+    /// Matches CATEGORIES.
     pub categories: Option<Vec<String>>,
+    /// Matches ATTENDEES.
     pub attendees: Option<Vec<String>>,
+    /// Matches ORGANIZER.
     pub organizer: Option<String>,
+    /// Matches PRIORITY.
     pub priority: Option<u8>,
+    /// Matches SEQUENCE.
     pub sequence: Option<i32>,
+    /// Matches DTSTAMP.
     pub dtstamp: Option<DateMaybeTime>,
+    /// Matches RECURRENCE_ID.
     pub recurrence_id: Option<DateMaybeTime>,
+    /// Contains information from RRULE, RDATE, EXDATE, EXRULE and DTSTART.
     pub rrule: Option<RRuleSet>,
+    /// Matches COMMENT.
     pub comment: Option<String>,
+    /// Matches ATTACH.
     pub attach: Option<Vec<String>>,
+    /// Matches ALARMS.
     pub alarms: Option<Vec<String>>,
+    /// Matches LAST_MODIFIED.
     pub last_modified: Option<DateMaybeTime>,
 }
 
