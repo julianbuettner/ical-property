@@ -200,6 +200,13 @@ impl TryFrom<&IcalEvent> for Event {
         map_ical_event(value)
     }
 }
+impl TryFrom<IcalEvent> for Event {
+    type Error = Error;
+
+    fn try_from(value: IcalEvent) -> Result<Self, Self::Error> {
+        map_ical_event(&value)
+    }
+}
 
 fn map_ical_event(input: &IcalEvent) -> Result<Event, Error> {
     let mut event = Event::default();
