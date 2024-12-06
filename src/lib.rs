@@ -44,6 +44,16 @@ impl From<DateTime<Utc>> for DateMaybeTime {
     }
 }
 
+impl DateMaybeTime {
+    /// Ignore potentially exiting time, only take naive date.
+    pub fn as_naive_date(&self) -> NaiveDate {
+        match self {
+            Self::Date(d) => d.clone(),
+            Self::DateTime(dt) => dt.date_naive(),
+        }
+    }
+}
+
 /// When inviting others, an
 /// Event can be tentative, confirmed or cancelled.
 #[derive(Debug)]
