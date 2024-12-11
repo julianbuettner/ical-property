@@ -24,7 +24,7 @@ impl<T> OptionVecPush<T> for Option<Vec<T>> {
 
 /// Events can either happen at a date
 /// or a date time.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DateMaybeTime {
     /// Event with a date and time
     DateTime(DateTime<Utc>),
@@ -56,7 +56,7 @@ impl DateMaybeTime {
 
 /// When inviting others, an
 /// Event can be tentative, confirmed or cancelled.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum EventStatus {
     /// Invite was not confirmed.
     Tentative,
@@ -81,7 +81,7 @@ impl FromStr for EventStatus {
 
 /// Whether an event is blocking a time interval
 /// in the calender.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum EventTransparency {
     /// Event block interval.
     Opaque,
@@ -155,7 +155,7 @@ fn parse_datetime(s: &str) -> Result<DateMaybeTime, Error> {
 /// Heart of this crate. It is supposed to
 /// define an event as described in RFC 5545,
 /// but with fitting datatypes.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct Event {
     /// Matches UID.
     pub uid: Option<String>,
